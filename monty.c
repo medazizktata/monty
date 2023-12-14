@@ -63,10 +63,25 @@ int main(int argc, char *argv[])
 
 	while ((read = getline(&line, &len, file)) != -1)
 	{
+		line_number++;
+		if (line[read - 1] == '\n')
+			line[read - 1] = '\0';
+		if (strlen(line) == 0 || (strlen(line) == 1 && line[0] == ' '))
+			continue;
+		char *opcode = strtok(line, " ");
+		global_opcode_argument = strtok(NULL, " ");
+		if (strcmp(opcode, "push") == 0)
+		{
+			push(&stack, line_number);
+		}
+		else if (strcmp(opcode, "pall") == 0)
+		{
+			pall(&stack, line_number);
+		}
+		global_opcode_argument = NULL;
 	}
 	fclose(file);
 	if (line)
 		free(line);
 	return EXIT_SUCCESS;
 }
-
